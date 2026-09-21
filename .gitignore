@@ -1,0 +1,9 @@
+node_modules
+.next
+.wrangler
+.env*
+!.env.example
+.dev.vars
+playwright-report
+test-results
+*.tsbuildinfo

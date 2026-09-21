@@ -1,0 +1,47 @@
+name: Validate
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: archive
+          POSTGRES_PASSWORD: archive
+          POSTGRES_DB: archive_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s
+          --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run db:test
+        env:
+          MIGRATION_DATABASE_URL: postgres://archive:archive@localhost:5432/archive_test
+      - run: psql "$MIGRATION_DATABASE_URL" -v ON_ERROR_STOP=1 -c "CREATE ROLE archive_test_client LOGIN PASSWORD 'test-only' NOSUPERUSER NOBYPASSRLS IN ROLE archive_api"
+        env:
+          MIGRATION_DATABASE_URL: postgres://archive:archive@localhost:5432/archive_test
+      - run: npm test
+        env:
+          TEST_DATABASE_URL: postgres://archive_test_client:test-only@localhost:5432/archive_test
+      - run: npm run build
+      - run: npm run api:build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results
+          path: test-results

@@ -1,0 +1,35 @@
+{
+  "name": "travel-archive",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w apps/web",
+    "build": "npm run build -w apps/web",
+    "typecheck": "tsc --noEmit -p apps/web && tsc --noEmit -p apps/api",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "postinstall": "node scripts/copy-map-worker.mjs",
+    "db:test": "bash scripts/db-check.sh",
+    "api:build": "npm run build -w apps/api",
+    "contract:generate": "node scripts/openapi.mjs && openapi-typescript openapi/openapi.yaml -o packages/api-client/src/schema.d.ts"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-parser": "^13.0.0",
+    "@biomejs/biome": "latest",
+    "@playwright/test": "latest",
+    "@types/node": "latest",
+    "fake-indexeddb": "^6.2.5",
+    "i18n-iso-countries": "^7.14.0",
+    "openapi-typescript": "^7.13.0",
+    "typescript": "latest",
+    "vitest": "latest",
+    "world-countries": "^5.1.0",
+    "yaml": "^2.9.0"
+  },
+  "type": "module"
+}

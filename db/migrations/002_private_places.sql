@@ -1,0 +1,12 @@
+BEGIN;
+ALTER TABLE places ADD COLUMN kind text NOT NULL DEFAULT 'place' CHECK(kind IN ('country','city','place'));
+ALTER TABLE places ADD COLUMN user_id uuid REFERENCES users(id) ON DELETE CASCADE;
+ALTER TABLE visits DROP CONSTRAINT visits_place_id_fkey;
+ALTER TABLE visits ADD CONSTRAINT visits_place_id_fkey FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE;
+ALTER TABLE places ENABLE ROW LEVEL SECURITY;
+ALTER TABLE places FORCE ROW LEVEL SECURITY;
+CREATE POLICY visible_places ON places FOR SELECT USING(user_id IS NULL OR user_id=current_archive_user());
+CREATE POLICY own_places ON places FOR INSERT WITH CHECK(user_id=current_archive_user());
+DROP POLICY owner ON visits;
+CREATE POLICY owner ON visits USING(user_id=current_archive_user()) WITH CHECK(user_id=current_archive_user() AND EXISTS(SELECT 1 FROM places p WHERE p.id=place_id AND (p.user_id IS NULL OR p.user_id=current_archive_user())));
+COMMIT;

@@ -1,0 +1,23 @@
+{
+  "name": "@travel/web",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start --hostname 0.0.0.0"
+  },
+  "dependencies": {
+    "@auth0/auth0-spa-js": "^2.24.1",
+    "idb": "latest",
+    "lucide-react": "latest",
+    "maplibre-gl": "latest",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest"
+  },
+  "type": "module"
+}

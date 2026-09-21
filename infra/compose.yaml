@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgis/postgis:17-3.5
+    environment:
+      POSTGRES_USER: archive
+      POSTGRES_PASSWORD: archive
+      POSTGRES_DB: archive
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - archive-local:/var/lib/postgresql/data
+volumes:
+  archive-local:

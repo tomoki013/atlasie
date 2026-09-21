@@ -1,0 +1,48 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "travel-archive-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-05",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 0.1,
+    "logs": {
+      "invocation_logs": false
+    }
+  },
+  "vars": {
+    "WEB_ORIGIN": "http://localhost:3000",
+    "AUTH0_DOMAIN": "",
+    "AUTH0_AUDIENCE": "",
+    "TURNSTILE_HOSTNAME": "localhost",
+    "R2_ACCOUNT_ID": "",
+    "R2_BUCKET_NAME": "travel-archive-local"
+  },
+  "r2_buckets": [
+    {
+      "binding": "PHOTOS",
+      "bucket_name": "travel-archive-local"
+    }
+  ],
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "00000000000000000000000000000000",
+      "localConnectionString": "postgres://archive:archive@localhost:5432/archive"
+    }
+  ],
+  "ratelimits": [
+    {
+      "name": "WRITE_LIMITER",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 60,
+        "period": 60
+      }
+    }
+  ],
+  "triggers": {
+    "crons": ["*/15 * * * *"]
+  }
+}

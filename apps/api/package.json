@@ -1,0 +1,20 @@
+{
+  "name": "@travel/api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "wrangler deploy --dry-run"
+  },
+  "dependencies": {
+    "aws4fetch": "^1.0.20",
+    "hono": "latest",
+    "jose": "latest",
+    "postgres": "^3.4.9",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "latest",
+    "wrangler": "latest"
+  }
+}

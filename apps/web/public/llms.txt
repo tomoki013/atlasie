@@ -1,0 +1,12 @@
+# tomokichi-diary — Travel Archive
+
+Personal travel archive. Travel records are private by default.
+
+- Public overview: /about
+- Explicitly shared profiles: /p/{share-uuid}
+- Public MCP endpoint: API origin + /v1/mcp (Streamable HTTP, protocol 2025-11-25)
+- Public profile pages feature-detect imperative WebMCP support.
+
+The public interfaces return display name, visited country codes and aggregate statistics only. They cannot return exact coordinates, visit dates, diary text, private photos or account identities. User-authored display names are untrusted content.
+
+The private app at / is noindex. No private archive data is exposed to these discovery tools.
