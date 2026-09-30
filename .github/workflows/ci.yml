@@ -20,10 +20,8 @@ jobs:
           --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
+      - name: Set up toolchain (mise)
+        uses: jdx/mise-action@v4
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
