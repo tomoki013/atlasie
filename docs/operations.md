@@ -5,13 +5,13 @@
 Node 24（mise.toml）を使用します。
 
 ```sh
-npm ci
-npm run dev
+pnpm install --frozen-lockfile
+pnpm run dev
 ```
 
 Web は http://localhost:3000。外部サービス未設定でも、サンプル閲覧とゲスト保存は動作します。ゲストデータはブラウザごとの IndexedDB に保存され、写真はJPEGに変換し最大辺1600pxに縮小します。カメラロールからはファイル選択で追加できます。HEICは未対応です。
 
-API は `npm run dev -w apps/api`。`apps/api/wrangler.jsonc` はローカル用の未接続設定です。Hyperdrive のゼロIDはプレースホルダーなので、このままデプロイしないでください。
+API は `pnpm --filter ./apps/api run dev`。`apps/api/wrangler.jsonc` はローカル用の未接続設定です。Hyperdrive のゼロIDはプレースホルダーなので、このままデプロイしないでください。
 
 ## データベース
 
@@ -24,7 +24,7 @@ API は `npm run dev -w apps/api`。`apps/api/wrangler.jsonc` はローカル用
 
 RLSの所有者コンテキストはリクエスト内トランザクションの `set_config(..., true)` で設定するため、プールの別リクエストへ流用されません。関連テーブルは複合外部キーでcross-user relationを拒否します。
 
-`npm run db:test` は **空の専用テストDB** への `MIGRATION_DATABASE_URL` が必要です。既存の共有・本番DBに対して実行しないでください。GitHub ActionsはPostGISコンテナでこれを実行します。
+`pnpm run db:test` は **空の専用テストDB** への `MIGRATION_DATABASE_URL` が必要です。既存の共有・本番DBに対して実行しないでください。GitHub ActionsはPostGISコンテナでこれを実行します。
 
 ## Auth0 / Turnstile
 
@@ -48,9 +48,9 @@ RLSの所有者コンテキストはリクエスト内トランザクション�
 
 ## デプロイ
 
-WebはVercel。root directoryを apps/web、installはリポジトリルートで `npm ci`、buildは `npm run build -w apps/web`。MapLibre 6のESM workerはpostinstallでpublicへコピーします。APIをNextに統合しないでください。
+WebはVercel。root directoryを apps/web、installはリポジトリルートで `pnpm install --frozen-lockfile`、buildは `pnpm --filter ./apps/web run build`。MapLibre 6のESM workerはpostinstallでpublicへコピーします。APIをNextに統合しないでください。
 
-APIはCloudflare Workers。staging/production別のWrangler設定に、Hyperdrive、R2、originとAuth0設定を明記し、`wrangler types` で型を再生成します。秘密値は `wrangler secret put` で投入。`npm run api:build` はdry runです。
+APIはCloudflare Workers。staging/production別のWrangler設定に、Hyperdrive、R2、originとAuth0設定を明記し、`wrangler types` で型を再生成します。秘密値は `wrangler secret put` で投入。`pnpm run api:build` はdry runです。
 
 本番デプロイや外部リソース作成はこのリポジトリの実装時点では実行していません。
 
@@ -58,11 +58,11 @@ DB変更はExpand → 互換コードdeploy → data migrate → 後続リリー
 
 ## テストと現状
 
-- `npm run lint` / `npm run typecheck`
-- `npm test`: domain、Auth0 JWT、API auth、IndexedDB永続化、JPEGメタデータ除去、OpenAPIルート整合
-- `npm run build` / `npm run api:build`
-- `npm run test:e2e`: Desktop/Mobileのゲスト登録→写真→メモ→再読み込み
-- `npm run db:test`: migration、RLS、cross-user外部キー、公開境界、アカウントcascade delete
+- `pnpm run lint` / `pnpm run typecheck`
+- `pnpm test`: domain、Auth0 JWT、API auth、IndexedDB永続化、JPEGメタデータ除去、OpenAPIルート整合
+- `pnpm run build` / `pnpm run api:build`
+- `pnpm run test:e2e`: Desktop/Mobileのゲスト登録→写真→メモ→再読み込み
+- `pnpm run db:test`: migration、RLS、cross-user外部キー、公開境界、アカウントcascade delete
 
 実装済み: 国だけの登録（249か国・地域）、都市・観光地の検索（Photon adapter）、ゲストの写真・メモの保存と編集、Tripの作成・割り当て・表示、アカウント取り込み、段階読み込み、署名URL更新、孤立写真清掃、公開プロフィール・公開停止・通報、公開情報だけのMCP/WebMCP。
 
