@@ -6,7 +6,7 @@
       "!!**/data",
       "!!**/.next",
       "!!**/worker-configuration.d.ts",
-      "!!package-lock.json",
+      "!!pnpm-lock.yaml",
       "!!apps/web/public/maplibre",
       "!!**/.wrangler",
       "!!test-results",

@@ -1,13 +1,9 @@
 {
   "name": "travel-archive",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
-    "dev": "npm run dev -w apps/web",
-    "build": "npm run build -w apps/web",
+    "dev": "pnpm --filter ./apps/web run dev",
+    "build": "pnpm --filter ./apps/web run build",
     "typecheck": "tsc --noEmit -p apps/web && tsc --noEmit -p apps/api",
     "lint": "biome check .",
     "format": "biome check --write .",
@@ -15,8 +11,13 @@
     "test:e2e": "playwright test",
     "postinstall": "node scripts/copy-map-worker.mjs",
     "db:test": "bash scripts/db-check.sh",
-    "api:build": "npm run build -w apps/api",
+    "api:build": "pnpm --filter ./apps/api run build",
     "contract:generate": "node scripts/openapi.mjs && openapi-typescript openapi/openapi.yaml -o packages/api-client/src/schema.d.ts"
+  },
+  "dependencies": {
+    "aws4fetch": "1.0.20",
+    "jose": "6.2.11",
+    "zod": "4.5.4"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "^13.0.0",
@@ -31,5 +32,6 @@
     "world-countries": "^5.1.0",
     "yaml": "^2.9.0"
   },
-  "type": "module"
+  "type": "module",
+  "packageManager": "pnpm@11.11.0"
 }

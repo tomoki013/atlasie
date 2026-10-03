@@ -10,7 +10,7 @@ export default defineConfig({
   expect: { timeout: 15000 },
   use: { baseURL, trace: "retain-on-failure" },
   webServer: {
-    command: `npm run dev -w apps/web -- --port ${port}`,
+    command: `pnpm --filter ./apps/web run dev --port ${port}`,
     url: baseURL,
     reuseExistingServer: false,
     timeout: 180000,

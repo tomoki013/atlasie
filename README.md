@@ -3,8 +3,8 @@
 添付デザインに沿った、写真と地図で旅を振り返るWebアプリです。
 
 ```sh
-npm ci
-npm run dev
+pnpm install --frozen-lockfile
+pnpm run dev
 ```
 
 [http://localhost:3000](http://localhost:3000) を開いてください。サンプルの世界地図を閲覧し、「場所を追加」から写真・メモを登録できます。「自分の旅」はIndexedDBに保存されます。
